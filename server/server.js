@@ -48,13 +48,10 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-// Local / non-Vercel: listen after DB connects. Vercel serverless: export app only (no listen).
-const shouldListen =
-  process.env.NODE_ENV !== 'production' || process.env.VERCEL !== '1';
-
+// Local: listen after DB connects. Vercel (VERCEL=1): no listen — api/index.js invokes this app.
 const dbReady = connectDB();
 
-if (shouldListen) {
+if (process.env.VERCEL !== '1') {
   dbReady
     .then(() => {
       app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
