@@ -8,11 +8,14 @@ const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
 const tryonRoutes = require('./routes/tryon');
 
-const uploadsRoot = path.join(__dirname, 'uploads');
-['products', 'sessions'].forEach((sub) => {
-  const d = path.join(uploadsRoot, sub);
-  if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
-});
+// Skip on Vercel — read-only filesystem (see middleware/upload.js ensureDirs)
+if (process.env.VERCEL !== '1') {
+  const uploadsRoot = path.join(__dirname, 'uploads');
+  ['products', 'sessions'].forEach((sub) => {
+    const d = path.join(uploadsRoot, sub);
+    if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+  });
+}
 
 const app = express();
 

@@ -7,8 +7,17 @@ const sessionDir = path.join('uploads', 'sessions');
 const sessionDirAbs = path.join(__dirname, '..', 'uploads', 'sessions');
 
 function ensureDirs() {
-  [productDir, sessionDirAbs].forEach((d) => {
-    if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+  // Vercel serverless filesystem is read-only — skip directory creation
+  if (process.env.VERCEL === '1') return;
+
+  ['uploads/products', 'uploads/sessions'].forEach((dir) => {
+    try {
+      fs.mkdirSync(path.join(__dirname, '..', dir), { recursive: true });
+    } catch (err) {
+      if (err.code !== 'EEXIST') {
+        console.warn('Could not create upload dir:', dir, err.message);
+      }
+    }
   });
 }
 ensureDirs();
