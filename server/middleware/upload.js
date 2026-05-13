@@ -6,17 +6,24 @@ const productDir = path.join(__dirname, '..', 'uploads', 'products');
 const sessionDir = path.join('uploads', 'sessions');
 const sessionDirAbs = path.join(__dirname, '..', 'uploads', 'sessions');
 
+function shouldSkipUploadDirs() {
+  // Vercel sets VERCEL=1 in many builds; some runtimes only set VERCEL without strict "1"
+  if (process.env.VERCEL != null && String(process.env.VERCEL).length > 0) return true;
+  if (process.env.VERCEL_ENV) return true;
+  return false;
+}
+
 function ensureDirs() {
-  // Vercel serverless filesystem is read-only — skip directory creation
-  if (process.env.VERCEL === '1') return;
+  if (shouldSkipUploadDirs()) return;
 
   ['uploads/products', 'uploads/sessions'].forEach((dir) => {
+    const full = path.join(__dirname, '..', dir);
     try {
-      fs.mkdirSync(path.join(__dirname, '..', dir), { recursive: true });
+      fs.mkdirSync(full, { recursive: true });
     } catch (err) {
-      if (err.code !== 'EEXIST') {
-        console.warn('Could not create upload dir:', dir, err.message);
-      }
+      // EEXIST: already there. ENOENT/EROFS/EACCES: read-only or restricted (e.g. Vercel) — never crash startup
+      if (err.code === 'EEXIST') return;
+      console.warn('Skipping upload dir (non-fatal):', dir, err.code, err.message);
     }
   });
 }

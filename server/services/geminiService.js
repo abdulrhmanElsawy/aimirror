@@ -64,18 +64,30 @@ function getMimeType(filePathOrUrl) {
 
 function writeResultFile(sessionId, imgBuf) {
   const outDir = path.join(__dirname, '..', 'uploads', 'sessions');
-  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
   const outPath = path.join(outDir, `${sessionId}-result.jpg`);
-  fs.writeFileSync(outPath, imgBuf);
+  try {
+    if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+    fs.writeFileSync(outPath, imgBuf);
+  } catch (err) {
+    throw buildServiceError(
+      'Cannot save try-on image on this host (filesystem not writable, e.g. Vercel serverless). Use object/blob storage for production.',
+      503,
+      'STORAGE_UNAVAILABLE'
+    );
+  }
   return `/uploads/sessions/${sessionId}-result.jpg`;
 }
 
 function fallbackCopyUserImage(sessionId, userImagePath) {
   if (process.env.TRYON_FALLBACK_COPY_USER_IMAGE !== 'true') return null;
   const outDir = path.join(__dirname, '..', 'uploads', 'sessions');
-  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
   const outPath = path.join(outDir, `${sessionId}-result.jpg`);
-  fs.copyFileSync(userImagePath, outPath);
+  try {
+    if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+    fs.copyFileSync(userImagePath, outPath);
+  } catch {
+    return null;
+  }
   return {
     imageUrl: `/uploads/sessions/${sessionId}-result.jpg`,
     source: 'fallback',

@@ -8,8 +8,11 @@ const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
 const tryonRoutes = require('./routes/tryon');
 
-// Skip on Vercel — read-only filesystem (see middleware/upload.js ensureDirs)
-if (process.env.VERCEL !== '1') {
+// Skip on Vercel — read-only filesystem (align with middleware/upload.js)
+const onVercel =
+  (process.env.VERCEL != null && String(process.env.VERCEL).length > 0) ||
+  Boolean(process.env.VERCEL_ENV);
+if (!onVercel) {
   const uploadsRoot = path.join(__dirname, 'uploads');
   ['products', 'sessions'].forEach((sub) => {
     const d = path.join(uploadsRoot, sub);
@@ -51,10 +54,10 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-// Local: listen after DB connects. Vercel (VERCEL=1): no listen — api/index.js invokes this app.
+// Local: listen after DB connects. Vercel: no listen — api/index.js invokes this app.
 const dbReady = connectDB();
 
-if (process.env.VERCEL !== '1') {
+if (!onVercel) {
   dbReady
     .then(() => {
       app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
