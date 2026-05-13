@@ -1,0 +1,103 @@
+.root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  padding-bottom: 100px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--container-padding);
+  background: rgba(250, 250, 248, 0.92);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.back {
+  min-width: 44px;
+  min-height: 44px;
+  border: none;
+  background: none;
+  font-size: var(--text-lg);
+  cursor: pointer;
+  color: var(--color-text-primary);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-tight);
+}
+
+.wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-10) var(--container-padding);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 560px;
+}
+
+.card {
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  transition:
+    box-shadow var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
+}
+
+.card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.on {
+  border-color: var(--color-text-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.icon {
+  font-size: var(--text-2xl);
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.label {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-text-primary);
+  font-weight: var(--weight-medium);
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-4) var(--container-padding);
+  background: rgba(250, 250, 248, 0.95);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--color-border);
+}

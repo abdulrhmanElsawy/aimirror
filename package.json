@@ -1,0 +1,15 @@
+{
+  "name": "aimirror",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev:store": "npm run dev --prefix client-store",
+    "dev:tryon": "npm run dev --prefix client-tryon",
+    "dev:server": "npm run dev --prefix server",
+    "dev": "concurrently -n server,store,tryon -c blue,green,magenta \"npm run dev:server\" \"npm run dev:store\" \"npm run dev:tryon\"",
+    "seed": "npm run seed --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

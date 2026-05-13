@@ -1,0 +1,19 @@
+node_modules/
+.env
+dist/
+.DS_Store
+*.log
+
+# Env files (never commit secrets)
+server/.env
+client-store/.env
+client-tryon/.env
+
+# Uploaded user/session files (includes sessions/)
+server/uploads/**
+!server/uploads/.gitkeep
+
+# Per-package installs (root node_modules/ already ignored)
+client-store/node_modules/
+client-tryon/node_modules/
+server/node_modules/

@@ -1,0 +1,7 @@
+node_modules
+server/uploads
+*.log
+.env
+server/.env
+client-store/.env
+client-tryon/.env
