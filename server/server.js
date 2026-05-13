@@ -54,7 +54,7 @@ const dbReady = connectDB();
 if (process.env.VERCEL !== '1') {
   dbReady
     .then(() => {
-      app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+      app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     })
     .catch((err) => {
       console.error(err);

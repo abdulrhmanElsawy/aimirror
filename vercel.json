@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "installCommand": "npm install --prefix server && npm install --prefix client-tryon",
+  "buildCommand": "npm run build --prefix client-tryon",
+  "outputDirectory": "client-tryon/dist",
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
